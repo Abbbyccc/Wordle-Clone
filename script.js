@@ -1,6 +1,7 @@
 const letterbox = document.querySelector(".letter-container")
 const keybox = document.querySelector(".key-container")
-
+const msgArea = document.querySelector(".msg-container")
+let wordle = 'SUPER'
 const keys = [
     'Q',
     'W',
@@ -41,6 +42,7 @@ const letterBoxRow = [
 ]
 let curRow = 0
 let curBox = 0
+let isGameOver = true
 
 letterBoxRow.forEach((rows, rowIndex) => {
     const boxRow = document.createElement('div')
@@ -66,6 +68,11 @@ keys.forEach(key => {
 const handleClick = (key) => {
     if (key === '<') {
         deleteKey()
+        console.log(letterBoxRow)
+        return
+    }
+    if (key === 'ENTER') {
+        checkKey()
         return
     }
     addWord(key)
@@ -75,8 +82,9 @@ function addWord(key) {
     if (curRow < 5 || curBox < 5) {
         const box = document.getElementById('row_' + curRow + '-Box_' + curBox)
         box.textContent = key
+        letterBoxRow[curRow][curBox] = key
         curBox++
-        // letterBoxRow[curRow][curBox] = key
+
     }
 }
 
@@ -85,9 +93,37 @@ const deleteKey = () => {
         curBox--
         const box = document.getElementById('row_' + curRow + '-Box_' + curBox)
         box.textContent = ""
+        letterBoxRow[curRow][curBox] = ""
     }
 }
 
-const checkKey= ()=>{
-    
+const checkKey = () => {
+    const guess = letterBoxRow[curRow].join('')
+    if (curBox === 5 && guess === wordle) {
+        // showMsg('the guess is' + wordle + 'you won')
+        showMsg("you win the word is" + wordle)
+        isGameOver
+        return
+    } else {
+        if (curRow >= 4) {
+            showMsg("Reach guess limits")
+            isGameOver
+            return
+        }
+        if (curRow < 4 && curBox == 5) {
+            curRow++
+            curBox = 0
+            showMsg("guess again!")
+            console.log('guess again!')
+            return
+        }
+    }
+}
+
+const showMsg = (text) => {
+    const msg_element = document.createElement('p')
+    msg_element.setAttribute('id', 'msg')
+    msg_element.textContent = text
+    msgArea.append(msg_element)
+    setTimeout(() => msgArea.removeChild(msg_element), 2000)
 }
