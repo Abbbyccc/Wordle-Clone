@@ -101,7 +101,7 @@ const checkKey = () => {
     const guess = letterBoxRow[curRow].join('')
     if (curBox === 5 && guess === wordle) {
         // showMsg('the guess is' + wordle + 'you won')
-        showMsg("you win the word is" + wordle)
+        showMsg("you win the word is " + wordle)
         isGameOver
         return
     } else {
